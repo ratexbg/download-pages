@@ -1,0 +1,9 @@
+.off-screen {
+    position: fixed;
+    left: -200px;
+    top: 0;
+    width: 100px; height: 100px;
+    padding: 1em;
+    background: red;
+    color: white;
+  }
