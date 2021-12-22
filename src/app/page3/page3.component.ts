@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-page3',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Page3Component implements OnInit {
 
-  constructor() { }
+  totalAngularPackages='';
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.http.get<any>('http://localhost:3000/pages/3').subscribe(data => {
+      this.totalAngularPackages = data.text;
+     console.log(this.totalAngularPackages);
+  })    
   }
+
 
 }

@@ -28,14 +28,14 @@ export class AppComponent {
    
     el.innerHTML = text;
     el.id = 'page2';
-    document.body.appendChild(el);
+    document.body.appendChild(el); // priema i child. 
     // var data = document.getElementById(`page2`);
 
     // console.log(data);
 
     html2canvas(el).then(canvas => {
       // Few necessary setting options
-      var imgWidth = 208;
+      var imgWidth = 104;
       var pageHeight = 295;
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
@@ -47,8 +47,8 @@ export class AppComponent {
       // console.log(canvas.width);
       
 
-      // let win = window.open();
-      // win!.document.write("<img src='"+canvas.toDataURL('image/png')+"'/>");  /// image na canvasa
+      let win = window.open();
+      win!.document.write("<img src='"+canvas.toDataURL('image/png')+"'/>");  /// image na canvasa
 
       console.log(canvas);
       let pdf = new jsPDF({
