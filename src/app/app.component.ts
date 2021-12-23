@@ -1,6 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
+// import { Page } from './Page';
 
 
 @Component({
@@ -11,22 +14,42 @@ import html2canvas from 'html2canvas';
 export class AppComponent {
   title = 'Download';
 
-  constructor(private renderer: Renderer2) {
+  // page: Page[] = [];
+
+  text = '';
+  id : number = 1;
+  constructor(private renderer: Renderer2, private http: HttpClient) {
 
   }
 
-  convertToPDF(page: string) {
-    // create elemtn  & innerhtml = ...
-    let text = 'SECOND Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa ducimus temporibus ipsam praesentium, aut unde. Rerum nulla totam, molestiae eligendi sit consequatur nesciunt ea harum voluptatibus est dolore, corporis dicta!';
-    // tozi text moje da sse vzeme ot bazata
+  // receiveText($event: string){
+  //   this.para= $event
+  //   console.log(this.para, " asd");
+  // }
 
+ async countId(){ for (this.id = 1; this.id < 4; this.id++) {
+    this.convertToPDF();
+    
+    }  
+  }
+
+
+  async convertToPDF() {
+    // create elemtn  & innerhtml = ...
+    // let text = 'SECOND Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa ducimus temporibus ipsam praesentium, aut unde. Rerum nulla totam, molestiae eligendi sit consequatur nesciunt ea harum voluptatibus est dolore, corporis dicta!';
+    // tozi text moje da sse vzeme ot bazata
+    let data = await lastValueFrom(this.http.get<any>(`http://localhost:3000/pages${this.id?'/'+this.id:''}`))
+      this.text = Array.isArray(data)?data[0].text:data.text;
+    console.log(this.text);
+   
+    
     
     const el = document.createElement("h1");
     // this.renderer.setProperty(el, "id", "page2");
     // this.renderer.setProperty(el, "innerHtml", text);
     // this.renderer.appendChild(document.body, el);
    
-    el.innerHTML = text;
+    el.innerHTML = this.text;
     el.id = 'page2';
     document.body.appendChild(el); // priema i child. 
     // var data = document.getElementById(`page2`);
@@ -47,8 +70,8 @@ export class AppComponent {
       // console.log(canvas.width);
       
 
-      let win = window.open();
-      win!.document.write("<img src='"+canvas.toDataURL('image/png')+"'/>");  /// image na canvasa
+      // let win = window.open();
+      // win!.document.write("<img src='"+canvas.toDataURL('image/png')+"'/>");  /// image na canvasa
 
       console.log(canvas);
       let pdf = new jsPDF({
@@ -63,6 +86,7 @@ export class AppComponent {
       pdf.addImage(contentDataURL, 'PNG', 0, position, canvas.width, canvas.height) // dobavq snimkata kato 
       pdf.save('new-file.pdf'); // Generated PDF
       this.renderer.removeChild(document.body,el);
+
 
     });
 
